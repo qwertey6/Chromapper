@@ -6,7 +6,7 @@ class ColorSample extends Component {
     super(props);
     this.state = {};
     }
-  };
+
 
 	static propTypes = {};
 

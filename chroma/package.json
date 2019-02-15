@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/styles": "^3.0.0-alpha.10",
     "d3": "^5.9.1",
+    "d3-3d": "0.0.9",
     "prop-types": "^15.7.2",
+    "queue": "^5.0.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "react-scripts": "2.1.5"
+    "react-scripts": "2.1.5",
+    "topojson": "^3.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
