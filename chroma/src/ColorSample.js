@@ -4,7 +4,7 @@ import * as d3 from "d3";
 class ColorSample extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {color:""};
     }
 
 
@@ -14,23 +14,29 @@ class ColorSample extends Component {
     this.update();
   }
 
-	update = (color) => {
+  changeColor = (color) => {
+    this.setState({color:color})
+    d3.select("body")
+      .transition()
+      .style("background-color", this.state.color)
+  }
+
+	update = () => {
     let svg = d3.select(this.refs.svg)
     
     svg.selectAll("rect")
         .data([1])
+        .enter()
         .append("rect")
         .attr("width", "100%")
         .attr("height", "100%")
-        .attr("fill", color)
+        .transition()
+        .attr("fill", this.state.color)
 	}
 
-  submitAnswer = (event) => {
-    this.setState({results:{userAnswer: event.target.value}});
-  }
-
   render() {
-    return (<svg ref="svg" preserveAspectRatio="none" viewBox="0 0 100 100" height='100%' width='100%'/>);
+    this.update();
+    return null;//(<svg ref="svg" preserveAspectRatio="none" viewBox="0 0 100 100" height='100' width='100'/>);
   }
 }
 

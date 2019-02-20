@@ -6,11 +6,15 @@
     "@material-ui/styles": "^3.0.0-alpha.10",
     "d3": "^5.9.1",
     "d3-3d": "0.0.9",
+    "detector-webgl": "^2.0.0",
     "prop-types": "^15.7.2",
     "queue": "^5.0.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-scripts": "2.1.5",
+    "three": "^0.101.1",
+    "three-orbitcontrols": "^2.101.1",
+    "three-webgl-stats": "^1.0.5",
     "topojson": "^3.0.2"
   },
   "scripts": {
