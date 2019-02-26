@@ -35,7 +35,7 @@ class QuestionArea extends Component {
 		return(
 			<div width="100%">
 				<button ref="yes" onClick={d=>this.props.submitAnswer(1)} style={
-					{"width":'40%',
+					{//"width":'40%',
 					 x:'0%',
 					 padding:'10px 24px',
 					 borderRadius:'10px',
@@ -51,7 +51,7 @@ class QuestionArea extends Component {
 					}
 				}>Background IS Pastel</button>
 				<button ref="toggle" onClick={d=>this.toggleMode()} style={
-					{"width":'20%',
+					{//"width":'20%',
 					 x:'0%',
 					 backgroundColor: 'rgba(0,0,0,0)',
 					 textAlign:'center',
@@ -65,7 +65,7 @@ class QuestionArea extends Component {
 					}
 				}>{this.buttonVisibility === 'visible' ? 'View Results': 'Map Colors' }</button>
 				<button ref="no" onClick={d=>this.props.submitAnswer(0)} style={
-					{"width":'40%',
+					{//"width":'40%',
 					 padding:'10px 24px',
 					 borderRadius:'10px',
 					 backgroundColor: 'rgba(0,0,0,0)',
