@@ -153,15 +153,15 @@ class ColorCube extends Component {
 		const transtime = 6000;
 
 		const xi = this.group.rotation.x;
-		const xf = xi + pi * 10 * Math.random()
+		const xf = xi + pi * 2// * Math.random()
 		const dx = (xf - xi)/transtime
 
 		const yi = this.group.rotation.y;
-		const yf = yi + pi * 10 * Math.random()
+		const yf = yi + pi * 2// * Math.random()
 		const dy = (yf - yi)/transtime
 
 		const zi = this.group.rotation.z;
-		const zf = zi + pi * 10 * Math.random()
+		const zf = zi + pi * 2// * Math.random()
 		const dz = (zf - zi)/transtime
 
 		var trans = d3.timer((t)=>{ // slightly speed up the cube's rotation for the next 10 seconds. Makes this a bit more fun, and encourages users to keep going
@@ -241,8 +241,9 @@ class ColorCube extends Component {
 	
 	animate = () => {
 		//*
-		this.group.rotation.x += 0.01
-		this.group.rotation.y += 0.01
+		this.group.rotation.x += 0.001
+		this.group.rotation.y += 0.001
+		this.group.rotation.z += 0.001
 		/**/
 		this.renderScene()
 		this.frameId = window.requestAnimationFrame(this.animate)
@@ -253,6 +254,7 @@ class ColorCube extends Component {
 	}
 
 	render(){
+
 		return(
 			<div
 				style={{ width: '400px', height: '400px' }}

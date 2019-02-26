@@ -7,47 +7,80 @@ class QuestionArea extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
+		this.buttonVisibility = 'visible'
 		}
 
 
-	static propTypes = {submitAnswer: PropTypes.func.isRequired};
+	static propTypes = {submitAnswer: PropTypes.func.isRequired,
+						toggleMode: PropTypes.func.isRequired};
 
 	componentDidMount(){/*update the graph after the component mounts (and the svg is created)*/
-		this.update();
 	}
 
-	update = (color) => {
-		let svg = d3.select(this.refs.svg)
-		
-		const data = [[0 , 40, "Pastel",    "rgb(20,200,20)"],
-									[60,100, "Not Pastel","rgb(200,20,20)"]]
+	toggleMode(){
 
-		let rects = svg.selectAll("rect")
-				.data(data)
-
-		rects.enter()
-        .append("rect")
-				//.enter()
-        .attr("x", d=>d[0])
-				.attr("y", 10)
-				.attr("width", d=>d[1]-d[0])
-				.attr("height", 20)
-				.attr("fill", d=>d[3])
-        .on("mousedown", (d,i)=> this.props.submitAnswer((i===0)*1))
-
-		let text = svg.selectAll("text")
-				.data(data)
-		/*
-    text.enter()
-        .append("text")
-        .attr("x", d=>(d[1]+d[0])/2)
-        .attr("y", 50)
-        .text(d=>d[2])
-        */
+		if(this.buttonVisibility === "visible"){
+			this.buttonVisibility = 'hidden';
+			this.refs.toggle.style.color = "rgb(255,255,255,1)"
+		} else {
+			this.buttonVisibility = 'visible';
+			this.refs.toggle.style.color = "rgb(0,0,0,1)"
+		}
+		this.refs.yes.style.visibility =  this.buttonVisibility;
+		this.refs.no.style.visibility = this.buttonVisibility;
+		this.props.toggleMode();
 	}
 
 	render() {
-		return (<svg ref="svg" viewBox="0 0 100 100" height='100%' width='100%'/>);
+		return(
+			<div width="100%">
+				<button ref="yes" onClick={d=>this.props.submitAnswer(1)} style={
+					{"width":'40%',
+					 x:'0%',
+					 padding:'10px 24px',
+					 borderRadius:'10px',
+					 backgroundColor: 'rgba(0,0,0,0)',
+					 textAlign: 'center',
+					 textDecoration: 'none',
+					 fontSize: '16px',
+					 border: '2px solid #4CAF50',
+					 color: 'black',
+					 padding: '15px 32px',
+					 display: 'inline-block',
+					 visibility:this.buttonVisibility
+					}
+				}>Background IS Pastel</button>
+				<button ref="toggle" onClick={d=>this.toggleMode()} style={
+					{"width":'20%',
+					 x:'0%',
+					 backgroundColor: 'rgba(0,0,0,0)',
+					 textAlign:'center',
+					 textDecoration: 'none',
+					 fontSize: '16px',
+					 border: 'none',
+					 color: 'black',
+					 padding: '15px 32px',
+					 margin:'auto',
+					 display: 'inline-block',
+					}
+				}>{this.buttonVisibility === 'visible' ? 'View Results': 'Map Colors' }</button>
+				<button ref="no" onClick={d=>this.props.submitAnswer(0)} style={
+					{"width":'40%',
+					 padding:'10px 24px',
+					 borderRadius:'10px',
+					 backgroundColor: 'rgba(0,0,0,0)',
+					 textAlign: 'center',
+					 textDecoration: 'none',
+					 fontSize: '16px',
+					 border: '2px solid #F44336',
+					 color: 'black',
+					 padding: '15px 32px',
+					 display: 'inline-block',
+					 visibility:this.buttonVisibility
+					}
+				}>Background NOT Pastel</button>
+			</div>)
+		//return (<svg ref="svg" viewBox="0 0 100 100" height='100%' width='100%'/>);
 	}
 }
 

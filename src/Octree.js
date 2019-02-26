@@ -57,7 +57,10 @@ class Delegator{
 		}
 		this.users[userID].push(octree.center);
 		octree.assignRating(rating);
-		
+	}
+
+	getPoints(){
+		return this.octree.getAllRatings();
 	}
 }
 
@@ -84,6 +87,9 @@ class Octree{
 		if(this.subdivided === true){
 			console.log("Warning: attempted to subdivide octant more than once");
 			return;
+		} else if ( Math.floor(this.size/2) === Math.floor(this.size) ){
+			console.log("ERROR: Woah! We've filled up the entire solution space!!!")
+			return;
 		}
 		this.subdivided = true;
 
@@ -102,35 +108,7 @@ class Octree{
 		this.octants[7] = new Octree(new Point(cx+s, cy+s, cz+s), s);
 
 	}
-/*
-	addPoint(x, y, z, rating){
-		if( this.center.rating === undefined ) {
-			this.center.assignRating();
-		}
 
-		var i = this.getIndex(x,y,z);
-		if(this.octants[i.i] === undefined){//if we are trying to add a point to an octant which is unfilled,
-			this.octants[i.i] = new Octree(new Point(i.c.x, i.c.y, i.c.z), this.size/2) //subdivide this octant to hold more points
-		}
-		this.octants[i.i].addPoint(x, y, z, rating);//hand the task off to the 
-
-	}
-	
-	getIndex(x,y,z){
-		const cx = this.center.x;
-		const cy = this.center.y;
-		const cz = this.center.z;
-		const s  = this.size/2;
-		if(cx < x && cy < y && cz < z){return {i:0, c:{x:cx-s , y:cy-s , z:cz-s }};} // TODO :: maybe the +'s and -'s need to be swapped..??
-		if(cx < x && cy < y && cz > z){return {i:1, c:{x:cx-s , y:cy-s , z:cz+s }};}
-		if(cx < x && cy > y && cz < z){return {i:2, c:{x:cx-s , y:cy+s , z:cz-s }};}
-		if(cx < x && cy > y && cz > z){return {i:3, c:{x:cx-s , y:cy+s , z:cz+s }};}
-		if(cx > x && cy < y && cz < z){return {i:4, c:{x:cx+s , y:cy-s , z:cz-s }};}
-		if(cx > x && cy < y && cz > z){return {i:5, c:{x:cx+s , y:cy-s , z:cz+s }};}
-		if(cx > x && cy > y && cz < z){return {i:6, c:{x:cx+s , y:cy+s , z:cz-s }};}
-		if(cx > x && cy > y && cz > z){return {i:7, c:{x:cx+s , y:cy+s , z:cz+s }};}
-	}
-*/
 	getFringe(){//bfs to get a list of points on the current fringe of the Octree
 		var fringe = this.octants.filter( x=>x !== undefined ).filter( x=>x.center.ratings <= RATINGS_TARGET)
 		if(!fringe.length){//if fringe is all undefined, or doesn't have enough ratings
