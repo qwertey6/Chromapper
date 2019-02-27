@@ -4,6 +4,7 @@ var port = 3001;
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
+
 const concat = (x,y) =>
   x.concat(y)
 const flatMap = (f,xs) =>
@@ -13,7 +14,7 @@ Array.prototype.flatMap = function(f) {
 /* ^ taken from stack overflow. Array.flatMap will SOON be in native ECMAscript*/
 }
 
-//import { Delegator } from './src/Octree';
+const firebaser = require('./src/Firebaser.js')
 const Delegator = require('./src/Octree.js');
 
 app.use(bodyParser.json());
@@ -57,8 +58,10 @@ function shutDown() {
 		console.log('Received kill signal, shutting down gracefully');
 		server.close(() => {
 				console.log('Closed out remaining connections');
-				writeCache();
-				process.exit(0);
+				//writeCache(); // call this if running on a system where you can write/read files with permanence
+				
+				firebaser.saveCache(delegator, ()=>{process.exit(0)});
+				//process.exit(0);
 		});
 
 		setTimeout(() => {
@@ -74,7 +77,6 @@ function shutDown() {
 function writeCache(){
 	fs.writeFileSync("./cache.json", JSON.stringify(delegator), {encoding:'utf8', mode:0o666 ,flag:'w+'}); 
 	console.log("The cache was succesfully saved!");
-
 }
 
 function readCache(){
@@ -93,9 +95,20 @@ function readCache(){
 
 
 	});
+}//readCache(); // call this if running on a system where you can write/read files with permanence
+firebaser.fetchCache((data)=>{
+	//console.log("fetchCache returned: ",data)
+	if(data !== undefined){
+	try{
+		let cache = JSON.parse(data);
+		delegator = new Delegator(cache);
+	} catch (error){
+		console.log(error);
+		console.log("\nUsing fresh delegator (reason: couldn't parse delegator from firebase's cache.json)\n")
+	}
 }
+})
 
-readCache();
 process.on('SIGTERM', shutDown);
 process.on('SIGINT', shutDown);
 
