@@ -2,10 +2,9 @@ import React, {Component} from "react";
 import * as d3 from 'd3'; 
 import * as THREE from 'three';
 import './ColorCube.css';
-import RendererStats from 'three-webgl-stats';
 
-
-const OrbitControls = require('three-orbitcontrols');
+//import RendererStats from 'three-webgl-stats';
+//const OrbitControls = require('three-orbitcontrols');
 
 
 

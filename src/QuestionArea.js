@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import * as d3 from "d3";
+//import * as d3 from "d3";
 
 class QuestionArea extends Component {
 
@@ -37,7 +37,7 @@ class QuestionArea extends Component {
 				<button ref="yes" onClick={d=>this.props.submitAnswer(1)} style={
 					{//"width":'40%',
 					 x:'0%',
-					 padding:'10px 24px',
+					 //padding:'10px 24px',
 					 borderRadius:'10px',
 					 backgroundColor: 'rgba(0,0,0,0)',
 					 textAlign: 'center',
@@ -66,7 +66,7 @@ class QuestionArea extends Component {
 				}>{this.buttonVisibility === 'visible' ? 'View Results': 'Map Colors' }</button>
 				<button ref="no" onClick={d=>this.props.submitAnswer(0)} style={
 					{//"width":'40%',
-					 padding:'10px 24px',
+					 //padding:'10px 24px',
 					 borderRadius:'10px',
 					 backgroundColor: 'rgba(0,0,0,0)',
 					 textAlign: 'center',

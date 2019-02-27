@@ -1,14 +1,33 @@
-
+/*	Author: Jacob T. Kaplan
+ *	Github: https://github.com/qwertey6
+ *
+ * (Yet another) Octree by Jacob T. Kaplan
+ * Third language I've implemented Octrees in -- they're so useful for managing space subdivisions!
+ * 		The implementation here is especially pragmatic, as we are _uniformly_ subdividing/storing points
+ *		in  3D rgb space. Note: (x,y,z) ∈ [0,256] === (r,g,b) ⋲ [0, 256]. ie, colors are a 3 dimensional space.
+ *		This implementation also benefits from the fact that each octree only stores the point in its center. (a side effect of the uniform subdivisions)
+ *		This means that:		
+ *			Insertion: 		O(1)	--		--		Since each Octree only stores its center, and no other point, then insertion is constant time.
+ *			Search: 		N/a		--		--		Our use case doesn't require search
+ *			Delete: 		N/a		--		--		Our use case doesn't require delete
+ *			Get Fringe: 	O(n)	--		--		to find the fringe (see def below), we must recursively ask /each/ Octree if it belongs to the fringe
+ *
+ *	** NOTE: We define the 'Fringe' of an Octree which stores N ratings per node as all nodes which do not have at least N ratings yet
+*/
 
 const RATINGS_TARGET = 7;//each node will seek only 7 ratings
 
 class Point{
-	constructor(x,y,z){
+	constructor(x,y,z, rating){
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.rating = [];
-		this.ratings = 0
+		this.ratings = 0;
+		if(rating !== undefined){
+			this.rating = rating;
+			this.ratings = rating.length;
+		}
 	}
 	assignRating(r){
 		this.rating.push(r);
@@ -21,9 +40,19 @@ class Point{
 }
 
 class Delegator{
-	constructor(){
-		this.users = {/*will map userID:[points they've rated], to avoid asking the same users the same questions*/};
-		this.octree = new Octree(new Point(128, 128, 128), 128);
+	constructor(fromCache){
+		if(fromCache !== undefined){
+			this.octree = new Octree(fromCache.octree);
+			this.users = fromCache.users;
+			for(let user in this.users){
+				this.users[user] = this.users[user].map( d => new Point(d.x, d.y, d.z, d.rating))
+			}
+			console.log("Succesfully loaded Delegator from cache!")
+		} else {
+			//if we are not creating a Delegator from cache, then create an empty one with defaults
+			this.users = {/*will map userID:[points they've rated], to avoid asking the same users the same questions*/};
+			this.octree = new Octree(new Point(128, 128, 128), 128);
+		}
 	}
 	getNext(userID){
 		var fringe = this.octree.getFringe();
@@ -31,22 +60,11 @@ class Delegator{
 			return fringe[0];
 		}
 		var useranswers = this.users[userID];
-		var validChoice = true;
+		//console.log("useranswers: ", useranswers)
 		for(let i=0; i<fringe.length; i++){
-			if(useranswers.every( d=> !d.equals(fringe[i].center) )){ //if the user hasn't answered this question before,
+			if(useranswers.every( d=> !(d.equals(fringe[i].center)) )){ //if the user hasn't answered this question before,
 				return fringe[i];//ask them this question
-			}/*
-			for(let j=0; j<useranswers.length; j++){
-				if(useranswers[j].equals(fringe[i].center)){
-					validChoice = false;
-					break;//break if the user has already answered for this point
-				}else{
-					validChoice = true;
-				}
 			}
-			if(validChoice){
-				return fringe[i];
-			}*/
 		}
 		console.log("ERROR: should never have reached this point???")
 	}
@@ -55,21 +73,38 @@ class Delegator{
 		if(this.users[userID] === undefined){
 			this.users[userID] = [];
 		}
+		/*if(!(rating instanceof Point) ){
+			rating = new Point()
+		}*/
+		console.log("octree center: ", octree.center)
 		this.users[userID].push(octree.center);
 		octree.assignRating(rating);
 	}
 
 	getPoints(){
-		return this.octree.getAllRatings();
+		return this.octree.getAllRatings();// yay recursion
 	}
 }
 
 class Octree{
 	constructor(center, size){
-		this.octants = new Array(8); //an array of undefined or Octree
-		this.center = center; //center is a Point
-		this.size = size;
-		this.subdivided = false;
+
+		if(!(center instanceof Point) && size === undefined){ // if this is true, we were passed in cache from JSON.
+			let data = center;
+			if(data.octants.every(d=>d==null)){//if all the octants here are null
+				this.octants = new Array(8);
+			} else{this.octants = data.octants.map(d=>new Octree(d))}
+			let c = data.center;
+			this.center = new Point(c.x, c.y, c.z, c.rating);
+			this.size = data.size;
+			this.subdivided = data.subdivided;
+		} else {
+			//otherwise, we are either initializing a new Delegator, or subdividing an existing Octree
+			this.octants = new Array(8); //an array of undefined or Octree
+			this.center = center; //center is a Point
+			this.size = size;
+			this.subdivided = false;			
+		}
 	}
 
 	assignRating(rating){
@@ -136,4 +171,5 @@ class Octree{
 	}
 }
 
-export {Octree, Point, Delegator}
+module.exports = Delegator
+//export {Octree, Point, Delegator // uncomment this line to export it as an ES6 module

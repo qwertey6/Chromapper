@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import * as d3 from 'd3'; 
+//import * as d3 from 'd3'; 
 import * as THREE from 'three';
 import './ColorCube.css';
-import RendererStats from 'three-webgl-stats';
+//import RendererStats from 'three-webgl-stats';
 
 
-const OrbitControls = require('three-orbitcontrols');
+//const OrbitControls = require('three-orbitcontrols');
 
 
 
@@ -34,7 +34,7 @@ class SolutionSpacePointCloud extends Component {
 
 		var cubeSize = 256;
 
-		const cubeGeometry = new THREE.EdgesGeometry( new THREE.CubeGeometry(cubeSize, cubeSize, cubeSize) ); 
+		//const cubeGeometry = new THREE.EdgesGeometry( new THREE.CubeGeometry(cubeSize, cubeSize, cubeSize) ); 
 		// geometry
 		var geometry = new THREE.BoxGeometry( cubeSize, cubeSize, cubeSize );
 
@@ -60,7 +60,7 @@ class SolutionSpacePointCloud extends Component {
 		var color = new THREE.Color()
 		this.count = 0;
 
-		var geometry = new THREE.BufferGeometry();
+		geometry = new THREE.BufferGeometry();
 
 		this.points.forEach(point=>{
 			const [rgb, conf] = [[point.x, point.y, point.z], point.rating.reduce((n,c)=>n+c,0)/point.ratings];
@@ -353,9 +353,6 @@ function render() {
 	 	
 	}
 
-	update = (points) => {
-
-	}
 	
 	stop = () => {
 		cancelAnimationFrame(this.frameId)
