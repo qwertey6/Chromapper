@@ -112,6 +112,6 @@ firebaser.fetchCache((data)=>{
 process.on('SIGTERM', shutDown);
 process.on('SIGINT', shutDown);
 
-setInterval(()=>{firebaser.saveCache(delegator)},6000);// auto-save the delegator every minute
+setInterval(()=>{firebaser.saveCache(delegator)},120000);// auto-save the delegator every two minutes
 
 const server = app.listen(process.env.PORT || port);
