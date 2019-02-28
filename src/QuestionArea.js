@@ -7,24 +7,27 @@ class QuestionArea extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
-		this.buttonVisibility = 'visible'
+		this.buttonVisibility = 1
 		}
 
 
 	static propTypes = {submitAnswer: PropTypes.func.isRequired,
 						toggleMode: PropTypes.func.isRequired};
 
-	componentDidMount(){/*update the graph after the component mounts (and the svg is created)*/
+	componentWillMount(){/*update the graph after the component mounts (and the svg is created)*/
+		this.submitAnswer = this.props.submitAnswer;
 	}
 
 	toggleMode(){
 
-		if(this.buttonVisibility === "visible"){
-			this.buttonVisibility = 'hidden';
-			this.refs.toggle.style.color = "rgb(255,255,255,1)"
+		if(this.buttonVisibility === 1){
+			this.buttonVisibility = 0;
+			this.refs.toggle.style.color = "white";
+			this.submitAnswer = ()=>{};
 		} else {
-			this.buttonVisibility = 'visible';
-			this.refs.toggle.style.color = "rgb(0,0,0,1)"
+			this.buttonVisibility = 1;
+			this.refs.toggle.style.color = "black"
+			this.submitAnswer = this.props.submitAnswer;
 		}
 		this.refs.yes.style.visibility =  this.buttonVisibility;
 		this.refs.no.style.visibility = this.buttonVisibility;
@@ -34,7 +37,7 @@ class QuestionArea extends Component {
 	render() {
 		return(
 			<div width="100%">
-				<button ref="yes" onClick={d=>this.props.submitAnswer(1)} style={
+				<button ref="yes" onClick={d=>this.submitAnswer(1)} disabled={this.buttonVisibility ? "" : "disabled"} style={
 					{//"width":'40%',
 					x:'0%',
 					//padding:'10px 24px',
@@ -50,7 +53,7 @@ class QuestionArea extends Component {
 					"-webkit-appearance": 'none',
 					"-moz-appearance": 'none',
 					appearance: 'none',
-					visibility:this.buttonVisibility
+					opacity:this.buttonVisibility
 					}
 				}>Background IS Pastel</button>
 				<button ref="toggle" onClick={d=>this.toggleMode()} style={
@@ -67,7 +70,7 @@ class QuestionArea extends Component {
 					 display: 'inline-block',
 					}
 				}>{this.buttonVisibility === 'visible' ? 'View Results': 'Map Colors' }</button>
-				<button ref="no" onClick={d=>this.props.submitAnswer(0)} style={
+				<button ref="no" onClick={d=>this.submitAnswer(0)} disabled={this.buttonVisibility ? "" : "disabled"} style={
 					{//"width":'40%',
 					 //padding:'10px 24px',
 					 borderRadius:'10px',
@@ -79,7 +82,7 @@ class QuestionArea extends Component {
 					 color: 'black',
 					 padding: '15px 32px',
 					 display: 'inline-block',
-					 visibility:this.buttonVisibility
+					 opacity:this.buttonVisibility
 					}
 				}>Background NOT Pastel</button>
 			</div>)

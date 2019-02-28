@@ -5,7 +5,7 @@ import './ColorCube.css';
 //import RendererStats from 'three-webgl-stats';
 
 
-//const OrbitControls = require('three-orbitcontrols');
+const OrbitControls = require('three-orbitcontrols');
 
 
 
@@ -24,6 +24,14 @@ class SolutionSpacePointCloud extends Component {
 			1000*255
 		);
 		this.camera.position.z = 4*255
+
+
+		this.controls = new OrbitControls( this.camera );
+
+		this.controls.enablePan = false;
+		this.controls.maxZoom = 1.5;
+		this.controls.minZoom = 0.4;
+
 		//ADD RENDERER
 		this.renderer = new THREE.WebGLRenderer({ antialias: true , alpha: true })
 		this.renderer.setClearColor(0x000000, 0)
@@ -360,9 +368,9 @@ function render() {
 	
 	animate = () => {
 		//*
-		this.group.rotation.x += 0.01
-		this.group.rotation.y += 0.01
-		this.group.rotation.z += 0.01
+		this.group.rotation.x += 0.001
+		this.group.rotation.y += 0.001
+		this.group.rotation.z += 0.001
 		/**/
 		this.renderScene()
 		this.frameId = window.requestAnimationFrame(this.animate)
@@ -375,7 +383,7 @@ function render() {
 	render(){
 		return(
 			<div
-				style={{ width: '400px', height: '400px' }}
+				style={{ width: '700px', height: '700px' }}
 				ref={(mount) => { this.mount = mount }}
 			/>
 		)
