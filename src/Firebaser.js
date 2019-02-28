@@ -26,10 +26,15 @@ var metadata = {
 
 // Upload the file and metadata
 function saveCache(data, onFinish){
-	
-	const cacheFile = myBucket.file('/cache.json')
+	var cacheFile;
+	if(onFinish === undefined){
+		onFinish = ()=>{};
+		cacheFile = myBucket.file('/cache_'+(Math.random()*50).toFixed(0)+'.json')
+	}else{
+		cacheFile = myBucket.file('/cache.json')
+	}
 
-	cacheFile.save(JSON.stringify(data), {public:true}, function(err){
+	cacheFile.save(JSON.stringify(data), {resumable:false, public:true, metadata:metadata}, function(err){
 		if (!err) {
 			// File written successfully.
 			console.log("Uploaded cache.json to google cloud storage!")
@@ -45,6 +50,7 @@ function fetchCache(callback){
 	const cacheFile = myBucket.file('/cache.json')
 
 	cacheFile.download().then(function(data) {
+		console.log(String(data[0]))
 		const file = data[0];
 		if(!file){return;}
 		console.log("successfully downloaded cache.json from google-cloud")

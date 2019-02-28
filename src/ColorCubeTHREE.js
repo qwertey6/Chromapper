@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import './ColorCube.css';
 
 //import RendererStats from 'three-webgl-stats';
-//const OrbitControls = require('three-orbitcontrols');
+
+const OrbitControls = require('three-orbitcontrols');
 
 
 
@@ -22,7 +23,17 @@ class ColorCube extends Component {
 		  0.1*255,
 		  1000*255
 		);
+
+
 		this.camera.position.z = 4*255
+
+		this.controls = new OrbitControls( this.camera );
+
+		this.controls.enablePan = false;
+		this.controls.maxZoom = 1.5;
+		this.controls.minZoom = 0.4;
+		//this.controls.e
+
 		//ADD RENDERER
 		this.renderer = new THREE.WebGLRenderer({ antialias: true , alpha: true })
 		this.renderer.setClearColor(0x000000, 0)
@@ -256,7 +267,7 @@ class ColorCube extends Component {
 
 		return(
 			<div
-				style={{ width: '400px', height: '400px' }}
+				style={{ width: '100%', height: '100%' }}
 				ref={(mount) => { this.mount = mount }}
 			/>
 		)
