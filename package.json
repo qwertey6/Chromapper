@@ -21,7 +21,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "heroku-prebuild": "node preinstall.js",
-    "server":"node server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
