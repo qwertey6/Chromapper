@@ -383,7 +383,7 @@ function render() {
 	render(){
 		return(
 			<div
-				style={{ width: '500px', height: '500px' }}
+				style={{ width: '400px', height: '400px' }}
 				ref={(mount) => { this.mount = mount }}
 			/>
 		)
