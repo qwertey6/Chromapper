@@ -267,7 +267,7 @@ class ColorCube extends Component {
 
 		return(
 			<div
-				style={{ width: '700px', height: '700px' }}
+				style={{ width: '500px', height: '500px' }}
 				ref={(mount) => { this.mount = mount }}
 			/>
 		)
